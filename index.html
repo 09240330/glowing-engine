@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>室内设计客户需求备忘录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .form-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-right: 2px dashed #dee2e6;
+        }
+
+        .list-section {
+            padding: 30px;
+            background: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .customer-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .customer-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .customer-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .customer-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .customer-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .detail-item {
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 0.9em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .form-section {
+                border-right: none;
+                border-bottom: 2px dashed #dee2e6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 室内设计客户需求备忘录</h1>
+            <p>专业记录客户柜子颜色、设计细节和需求</p>
+        </div>
+
+        <div class="main-content">
+            <!-- 表单部分 -->
+            <div class="form-section">
+                <h2>添加客户需求</h2>
+                <form id="customerForm">
+                    <div class="form-group">
+                        <label for="estate">楼盘名称</label>
+                        <input type="text" id="estate" placeholder="例如：金色家园" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="room">房号</label>
+                        <input type="text" id="room" placeholder="例如：8栋1203" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">客户姓名</label>
+                        <input type="text" id="name" placeholder="例如：张先生" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="boardColor">板材颜色</label>
+                        <input type="text" id="boardColor" placeholder="例如：胡桃木色" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="boardBrand">板材品牌</label>
+                        <input type="text" id="boardBrand" placeholder="例如：索菲亚" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">成交价格</label>
+                        <input type="text" id="price" placeholder="例如：28500元" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="demands">客户具体需求</label>
+                        <textarea id="demands" placeholder="详细记录客户的设计要求，如：衣柜要通顶设计，需要多个抽屉，颜色要统一..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">💾 保存客户需求</button>
+                </form>
+            </div>
+
+            <!-- 列表部分 -->
+            <div class="list-section">
+                <h2>客户记录列表</h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 搜索楼盘、房号、客户姓名或板材颜色...">
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCustomers">0</div>
+                        <div>总客户数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayRecords">0</div>
+                        <div>今日新增</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="uniqueEstates">0</div>
+                        <div>楼盘数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPrice">0</div>
+                        <div>总金额</div>
+                    </div>
+                </div>
+
+                <div id="customerList">
+                    <div class="empty-state">
+                        <h3>暂无客户记录</h3>
+                        <p>请在左侧添加您的第一个客户需求</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CustomerMemo {
+            constructor() {
+                this.customers = this.loadData();
+                this.init();
+            }
+
+            init() {
+                // 表单提交
+                document.getElementById('customerForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addCustomer();
+                });
+
+                // 搜索功能
+                document.getElementById('searchInput').addEventListener('input', (e) => {
+                    this.searchCustomers(e.target.value);
+                });
+
+                this.renderList();
+                this.updateStats();
+            }
+
+            loadData() {
+                const saved = localStorage.getItem('designCustomers');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            saveData() {
+                localStorage.setItem('designCustomers', JSON.stringify(this.customers));
+            }
+
+            addCustomer() {
+                const customer = {
+                    id: Date.now().toString(),
+                    estate: document.getElementById('estate').value,
+                    room: document.getElementById('room').value,
+                    name: document.getElementById('name').value,
+                    boardColor: document.getElementById('boardColor').value,
+                    boardBrand: document.getElementById('boardBrand').value,
+                    price: document.getElementById('price').value,
+                    demands: document.getElementById('demands').value,
+                    createTime: new Date().toLocaleString('zh-CN')
+                };
+
+                this.customers.unshift(customer);
+                this.saveData();
+                this.renderList();
+                this.updateStats();
+                this.resetForm();
+                
+                alert('✅ 客户需求保存成功！');
+            }
+
+            resetForm() {
+                document.getElementById('customerForm').reset();
+            }
+
+            deleteCustomer(id) {
+                if (confirm('确定要删除这条客户记录吗？')) {
+                    this.customers = this.customers.filter(customer => customer.id !== id);
+                    this.saveData();
+                    this.renderList();
+                    this.updateStats();
+                }
+            }
+
+            searchCustomers(keyword) {
+                const filtered = this.customers.filter(customer => 
+                    customer.estate.includes(keyword) ||
+                    customer.room.includes(keyword) ||
+                    customer.name.includes(keyword) ||
+                    customer.boardColor.includes(keyword) ||
+                    customer.boardBrand.includes(keyword) ||
+                    customer.demands.includes(keyword)
+                );
+                this.renderList(filtered);
+            }
+
+            renderList(customers = this.customers) {
+                const container = document.getElementById('customerList');
+                
+                if (customers.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h3>暂无客户记录</h3>
+                            <p>请在左侧添加您的第一个客户需求</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = customers.map(customer => `
+                    <div class="customer-card">
+                        <div class="customer-header">
+                            <div class="customer-title">${customer.estate} - ${customer.room}</div>
+                            <button class="delete-btn" onclick="memo.deleteCustomer('${customer.id}')">删除</button>
+                        </div>
+                        <div><strong>客户：</strong>${customer.name}</div>
+                        <div class="customer-details">
+                            <div class="detail-item">
+                                <div class="detail-label">板材颜色</div>
+                                ${customer.boardColor}
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">板材品牌</div>
+                                ${customer.boardBrand}
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">成交价格</div>
+                                ${customer.price}
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">记录时间</div>
+                                ${customer.createTime}
+                            </div>
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <div class="detail-label">客户需求</div>
+                            <div>${customer.demands}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            updateStats() {
+                document.getElementById('totalCustomers').textContent = this.customers.length;
+                
+                const today = new Date().toLocaleDateString('zh-CN');
+                const todayCount = this.customers.filter(c => 
+                    c.createTime.includes(today)
+                ).length;
+                document.getElementById('todayRecords').textContent = todayCount;
+
+                const uniqueEstates = new Set(this.customers.map(c => c.estate)).size;
+                document.getElementById('uniqueEstates').textContent = uniqueEstates;
+
+                const totalPrice = this.customers.reduce((sum, c) => {
+                    const price = parseInt(c.price) || 0;
+                    return sum + price;
+                }, 0);
+                document.getElementById('totalPrice').textContent = totalPrice.toLocaleString() + '元';
+            }
+        }
+
+        // 初始化应用
+        const memo = new CustomerMemo();
+    </script>
+</body>
+</html>
